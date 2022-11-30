@@ -5,23 +5,9 @@ import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
 import Products from './pages/Products';
-import ProductByCategory from './componentes/ProductByCategory';
-import React, { useEffect, useState } from "react";
-import api from "./services/api";
 
 function App() {
   
-  const [category, setCategory] = useState();
-
-  useEffect(() => {
-    api
-      .get("/categorias")
-      .then((response) => setCategory(response.data))
-      .catch((err) => {
-        console.error("ops! ocorreu um erro" + err);
-      });
-  }, []);
-
   return (
     <>
       <BrowserRouter>
@@ -29,10 +15,6 @@ function App() {
           <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="produtos" element={<Products />} />
-          {category?.map((c) => 
-          <Route path={"produtos/" + c.id} element={<ProductByCategory />} />
-          )
-          }
           <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>

@@ -1,6 +1,5 @@
 package com.ufsc.file.upload.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -22,7 +21,6 @@ private Long id;
 private String nome;
 private int preco;        
 private int qtd;
-@JsonIgnore
 @ManyToOne
 @JoinColumn(name = "id_categoria")
 private Categoria categoria;
