@@ -12,11 +12,21 @@ import api from "./services/api";
 function App() {
   
   const [category, setCategory] = useState();
+  const [products, setProducts] = useState();
 
   useEffect(() => {
     api
       .get("/categorias")
       .then((response) => setCategory(response.data))
+      .catch((err) => {
+        console.error("ops! ocorreu um erro" + err);
+      });
+  }, []);
+
+  useEffect(() => {
+    api
+      .get("/produtos")
+      .then((response) => setProducts(response.data))
       .catch((err) => {
         console.error("ops! ocorreu um erro" + err);
       });
@@ -29,8 +39,8 @@ function App() {
           <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="produtos" element={<Products />} />
-          {category?.map((c) => 
-          <Route path={"produtos/" + c.id} element={<ProductByCategory />} />
+          {category?.map((c) =>
+          <Route path={"produtos/" + c.id} key={c.id} element={<ProductByCategory />} />
           )
           }
           <Route path="*" element={<NoPage />} />

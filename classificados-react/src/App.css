@@ -35,3 +35,9 @@ body {
   background-color: blue;
   
 }
+
+.addProduct {
+  width: '18rem';
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

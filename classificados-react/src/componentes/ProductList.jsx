@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import Container from 'react-bootstrap/Container';
 import ProductCard from "./ProductCard";
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 
 function ShowProducts() {
 
@@ -27,6 +29,13 @@ function ShowProducts() {
         category={p.categoria.nome}
         />
       ))}
+      <div>
+        <Card className='addProduct productCard d-inline-block text-center'>
+          <Card.Body>
+            <Button variant="primary">Adicionar Produto</Button>
+          </Card.Body>
+        </Card>
+      </div>
     </Container>
 
   );

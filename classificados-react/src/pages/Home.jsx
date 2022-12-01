@@ -44,9 +44,6 @@ const Home = () => {
                 />
                 <Card.Body>
                     <Card.Title>{c.nome}</Card.Title>
-                    <Link to={"/produtos/" + c.categoria.id}>
-                      <Button variant='primary'>Ver produtos</Button>
-                    </Link>
                 </Card.Body>
             </Card>
             ))
