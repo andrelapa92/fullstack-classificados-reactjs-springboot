@@ -4,10 +4,13 @@ import Container from 'react-bootstrap/Container';
 import ProductCard from "./ProductCard";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { useParams } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 function ShowProducts() {
 
   const [product, setProduct] = useState();
+  const { id } = useParams();
 
   useEffect(() => {
     api
@@ -23,16 +26,19 @@ function ShowProducts() {
     <Container className="text-center">
       {product?.map((p) => (
         <ProductCard
-        key={p.id}
+        key={p?.id}
         price={p.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
         title={p.nome}
         category={p.categoria.nome}
+        btnLink={`/produtos/${p.id}`}
         />
       ))}
       <div>
         <Card className='addProduct productCard d-inline-block text-center'>
           <Card.Body>
-            <Button variant="primary">Adicionar Produto</Button>
+            <Link to="/produtos/novoproduto">
+              <Button variant="primary">Adicionar produto</Button>
+            </Link>
           </Card.Body>
         </Card>
       </div>
