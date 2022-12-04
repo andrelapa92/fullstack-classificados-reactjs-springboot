@@ -10,19 +10,12 @@ function AddProduct() {
     const {id} =useParams();
 
     const [product, setProduct] = useState({
-
         nome: "",
         preco: "",
         qtd: "",
         categoria: [],
         file: []
-
-
-
     });
-
-
-
 
     const [categorias, setCategorias] = useState([]);
 
@@ -30,17 +23,11 @@ function AddProduct() {
         loadCategorias();
     }, []);
 
-
     const loadCategorias = async () => {
         const result = await axios.get("http://localhost:8080/categorias")
         setCategorias(result.data);
         console.log(result.data);
-
-
     }
-
-
-
 
     const { nome, preco, qtd } = product;
 
@@ -108,7 +95,6 @@ function AddProduct() {
             value={qtd}
             onChange={(e) => onInputChange(e)}
             />
-
             
             <br />
             <br />

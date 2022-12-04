@@ -5,49 +5,36 @@ import  {useNavigate, Link, useParams} from "react-router-dom";
 import { useEffect } from 'react';
 import Container from "react-bootstrap/esm/Container";
 import Button from "react-bootstrap/esm/Button";
-
+import ProductService from '../services/ProductService';
 
 export default function EditProduct () {
   
-
 let navigate = useNavigate();
 
-const {id} =useParams();
+const {id} = useParams();
 
-const [product,setProduct]=useState({
-        
-    nome: "",
-    preco: "",
-    qtd: "",
-    categoria: "",
+const [product,setProduct] = useState({
+  nome: "",
+  preco: "",
+  qtd: "",
+  categoria: ""
 });
 
-
-
-const{nome,preco,qtd} = product;
+const {nome, preco, qtd} = product;
 
 const [categorias, setCategorias] = useState([]);
 
-
-
-
-
-
 const handleCategory = (e) => {
-    setProduct ({...product, categoria: {
-
-        id: e.target.value,
-        nome: e.target.options[e.target.selectedIndex].text
+  setProduct ({...product, categoria: {
+      id: e.target.value,
+      nome: e.target.options[e.target.selectedIndex].text
     }
-    
-    })
-} 
+  })
+}
 
-const loadCategorias=async() => {
-    const result = await axios.get("http://localhost:8080/categorias")
+const loadCategorias = async() => {
+    const result = await axios.get("http://localhost:8080/categorias");
     setCategorias(result.data);
-
-
 }
 
 const onInputChange=(e)=>{
@@ -55,29 +42,26 @@ const onInputChange=(e)=>{
 
 };
 
-const loadProducts =async() => {
-
-  const result= await axios.get(`http://localhost:8080/produtos/${id}`)
+const loadProducts = async() => {
+  const result = await axios.get(`http://localhost:8080/produtos/${id}`);
   setProduct(result.data);
-  console.log(result.data);
-
-
 }
 
 useEffect(()=>{
-
     loadProducts();
     loadCategorias();
 }, []);
 
-
-const onSubmit= async (e)=> {
+const onSubmit = async (e)=> {
     e.preventDefault();
-     await axios.put(`http://localhost:8080/produtos/${id}`, product)
-     navigate("/produtos");
+    await axios.put(`http://localhost:8080/produtos/${id}`, product);
+    navigate("/produtos");
 };
 
-
+const onClick = async () => {
+  await ProductService.delete(id);
+  navigate("/produtos");
+}
 
 
   return (
@@ -86,11 +70,11 @@ const onSubmit= async (e)=> {
 
       <form onSubmit={(e) => onSubmit(e)}>
 
-        <label htmlFor="nameProduct">Nome do produto:</label>
+        <label htmlFor="nome">Produto:</label>
         <br />
         <input
         type="text"
-        name="nameProduct"
+        name="nome"
         placeholder="Produto"
         value={nome}
         onChange={(e) => onInputChange(e)}
@@ -99,11 +83,11 @@ const onSubmit= async (e)=> {
         <br />
         <br />
 
-        <label htmlFor="priceProduct">Preço do produto:</label>
+        <label htmlFor="preco">Preço:</label>
         <br />
         <input
         type="number"
-        name="priceProduct"
+        name="preco"
         placeholder="R$"
         value={preco}
         onChange={(e) => onInputChange(e)}
@@ -112,11 +96,11 @@ const onSubmit= async (e)=> {
         <br />
         <br />
 
-        <label htmlFor="quantityProduct">Quantidade do produto:</label>
+        <label htmlFor="qtd">Quantidade:</label>
         <br />
         <input
         type="number"
-        name="quantityProduct"
+        name="qtd"
         placeholder="Quantidade"
         value={qtd}
         onChange={(e) => onInputChange(e)}
@@ -125,11 +109,11 @@ const onSubmit= async (e)=> {
         <br />
         <br />
 
-        <label htmlFor="categoryProduct">Categoria:</label>
+        <label htmlFor="categoria">Categoria:</label>
         <br />
-        <select onChange={(e) => handleCategory(e)} name="categoryProduct">
+        <select onChange={(e) => handleCategory(e)} name="categoria">
           <option hidden>{product.categoria.nome}</option>
-          {categorias?.map((categoria) =>(
+          {categorias.map((categoria) =>(
             <option value={categoria.id} key={categoria.id}>{categoria.nome}</option>
             ))
           }
@@ -140,8 +124,17 @@ const onSubmit= async (e)=> {
         <br />
 
         <Button type="submit" variant="primary">Confirmar alterações</Button>
+
         <br />
         <br />
+
+        <Link to='/produtos'>
+          <Button variant="danger" onClick={(e) => onClick(e)}>Excluir produto</Button>
+        </Link>
+        
+        <br />
+        <br />
+
         <Link to='/produtos'>
           <Button variant="danger">Cancelar</Button>
         </Link>
