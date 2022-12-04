@@ -4,13 +4,11 @@ import Container from 'react-bootstrap/Container';
 import ProductCard from "./ProductCard";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { useParams } from 'react-router-dom'
 import { Link } from "react-router-dom";
 
 function ShowProducts() {
 
   const [product, setProduct] = useState();
-  const { id } = useParams();
 
   useEffect(() => {
     api

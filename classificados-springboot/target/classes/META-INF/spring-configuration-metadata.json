@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "storage",
+      "type": "com.ufsc.file.upload.util.StorageProperties",
+      "sourceType": "com.ufsc.file.upload.util.StorageProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "storage.location",
+      "type": "java.lang.String",
+      "sourceType": "com.ufsc.file.upload.util.StorageProperties"
+    }
+  ],
+  "hints": []
+}

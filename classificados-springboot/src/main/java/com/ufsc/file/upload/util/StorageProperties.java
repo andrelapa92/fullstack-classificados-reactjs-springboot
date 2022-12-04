@@ -1,12 +1,7 @@
-
 package com.ufsc.file.upload.util;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- *
- * @author RC_Ventura
- */
 @ConfigurationProperties("storage")
 public class StorageProperties {
     
