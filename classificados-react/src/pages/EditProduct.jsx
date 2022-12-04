@@ -1,56 +1,90 @@
-import React, { useEffect, useState } from "react";
+import React from 'react'
+import axios from "axios";
+import { useState } from 'react'
+import  {useNavigate, Link, useParams} from "react-router-dom";
+import { useEffect } from 'react';
 import Container from "react-bootstrap/esm/Container";
 import Button from "react-bootstrap/esm/Button";
-import { useNavigate, Link, useParams } from "react-router-dom";
-import ProductService from "../services/ProductService";
-import CategoryService from "../services/CategoryService";
 
-function EditProduct() {
 
-  const { id } = useParams();
+export default function EditProduct () {
+  
 
-  const [category, setCategory] = useState([]);
+let navigate = useNavigate();
 
-  const [product, setProduct] = useState({
-    nameProduct: "",
-    priceProduct: "",
-    quatityProduct: ""
-  })
+const {id} =useParams();
 
-  const { nameProduct, priceProduct, quantityProduct } = product;
+const [product,setProduct]=useState({
+        
+    nome: "",
+    preco: "",
+    qtd: "",
+    categoria: "",
+});
 
-  const loadCategorias = async () => {
-    const resultado = await CategoryService.getAll();
-    setCategory(resultado.data);
-  }
 
-  const loadProduto = async () => {
-    const resultado = await ProductService.get(id);
-    setProduct(resultado.data)
-  }
 
-  const onInputChange = (e) => {
-    setProduct({ ...product, [e.target.name]: e.target.value })
+const{nome,preco,qtd} = product;
+
+const [categorias, setCategorias] = useState([]);
+
+
+
+
+
+
+const handleCategory = (e) => {
+    setProduct ({...product, categoria: {
+
+        id: e.target.value,
+        nome: e.target.options[e.target.selectedIndex].text
+    }
+    
+    })
+} 
+
+const loadCategorias=async() => {
+    const result = await axios.get("http://localhost:8080/categorias")
+    setCategorias(result.data);
+
+
+}
+
+const onInputChange=(e)=>{
+    setProduct({...product, [e.target.name]: e.target.value});
+
 };
 
-  let navigate = useNavigate();
+const loadProducts =async() => {
 
-  const sendForm = async (e) => {
+  const result= await axios.get(`http://localhost:8080/produtos/${id}`)
+  setProduct(result.data);
+  console.log(result.data);
+
+
+}
+
+useEffect(()=>{
+
+    loadProducts();
+    loadCategorias();
+}, []);
+
+
+const onSubmit= async (e)=> {
     e.preventDefault();
-    await ProductService.update(id, product);
-    navigate("/");
-  }
+     await axios.put(`http://localhost:8080/produtos/${id}`, product)
+     navigate("/produtos");
+};
 
-    useEffect(() => {
-      loadProduto();
-      loadCategorias();
-  }, [])
+
+
 
   return (
     <Container className="text-center">
       <h1>Editando produto: {id}</h1>
 
-      <form onSubmit={(e) => sendForm(e)}>
+      <form onSubmit={(e) => onSubmit(e)}>
 
         <label htmlFor="nameProduct">Nome do produto:</label>
         <br />
@@ -58,7 +92,7 @@ function EditProduct() {
         type="text"
         name="nameProduct"
         placeholder="Produto"
-        value={nameProduct}
+        value={nome}
         onChange={(e) => onInputChange(e)}
         />
 
@@ -71,7 +105,7 @@ function EditProduct() {
         type="number"
         name="priceProduct"
         placeholder="R$"
-        value={priceProduct}
+        value={preco}
         onChange={(e) => onInputChange(e)}
         />
 
@@ -84,18 +118,35 @@ function EditProduct() {
         type="number"
         name="quantityProduct"
         placeholder="Quantidade"
-        value={quantityProduct}
+        value={qtd}
         onChange={(e) => onInputChange(e)}
         />
 
         <br />
         <br />
 
+        <label htmlFor="categoryProduct">Categoria:</label>
+        <br />
+        <select onChange={(e) => handleCategory(e)} name="categoryProduct">
+          <option hidden>{product.categoria.nome}</option>
+          {categorias?.map((categoria) =>(
+            <option value={categoria.id} key={categoria.id}>{categoria.nome}</option>
+            ))
+          }
+        </select>
+
+        <br />
+        <br />
+        <br />
+
         <Button type="submit" variant="primary">Confirmar alterações</Button>
+        <br />
+        <br />
+        <Link to='/produtos'>
+          <Button variant="danger">Cancelar</Button>
+        </Link>
 
       </form>
     </Container>
   );
 }
-  
-export default EditProduct;

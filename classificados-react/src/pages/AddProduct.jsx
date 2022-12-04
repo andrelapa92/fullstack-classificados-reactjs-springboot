@@ -2,79 +2,70 @@ import Container from "react-bootstrap/esm/Container";
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import { useNavigate, Link, useParams } from "react-router-dom";
-import ProductService from "../services/ProductService";
-import CategoryService from "../services/CategoryService";
-import ImgService from '../services/ImgService.js';
+import axios from "axios";
 
 function AddProduct() {
 
-    const { id } = useParams();
-
-    const [file, setFile] = useState();
-
-    function handleChange(e) {
-        setFile(e.target.files[0]);
-        handleSubmitFile();
-    }
-
-    const handleSubmitFile = async (e) => {
-        e.preventDefault();
-        ImgService.upload(file).then((data) => {
-            setProduct({
-                ...product, fileDB: {
-                    id: data.id,
-                    data: data.data,
-                    name: data.name,
-                    type: data.type,
-                }
-            })
-          });
-    };
-
-
     let navigate = useNavigate();
+    const {id} =useParams();
 
     const [product, setProduct] = useState({
-        nomeProduto: "",
-        precoProduto: "",
-        quantidadeProduto: "",
-        categoriaEntity: [],
-        fileDB: []
-    })
+
+        nome: "",
+        preco: "",
+        qtd: "",
+        categoria: [],
+        file: []
 
 
-    const [category, setCategory] = useState([]);
+
+    });
+
+
+
+
+    const [categorias, setCategorias] = useState([]);
 
     useEffect(() => {
-        loadCategory();
+        loadCategorias();
     }, []);
 
-    const loadCategory = async () => {
-        const resultado = await CategoryService.getAll();
-        setCategory(resultado.data);
+
+    const loadCategorias = async () => {
+        const result = await axios.get("http://localhost:8080/categorias")
+        setCategorias(result.data);
+        console.log(result.data);
+
+
     }
 
-    const { nameProduct, priceProduct, quantityProduct } = product;
+
+
+
+    const { nome, preco, qtd } = product;
 
     const onInputChange = (e) => {
         setProduct({ ...product, [e.target.name]: e.target.value });
+
     };
 
     const handleCategory = (e) => {
         setProduct({
-            ...product, categoriaEntity: {
+            ...product, categoria: {
+
                 id: e.target.value,
-                nameProduct: e.target.options[e.target.selectedIndex].text
+                nome: e.target.options[e.target.selectedIndex].text
             }
+
         })
     }
 
     const sendForm = async (e) => {
         e.preventDefault();
-        console.log(product);
-        const registeredProduct = await ProductService.create(product);
+        await axios.post("http://localhost:8080/produtos/", product)
         navigate("/");
-    }
+        alert("Produto cadastrado com sucesso");
+    };
 
     return (        
     <Container className="text-center">
@@ -82,46 +73,67 @@ function AddProduct() {
 
         <form onSubmit={(e) => sendForm(e)}>
 
-            <label htmlFor="nameProduct">Nome do produto:</label>
+            <label htmlFor="nome">Nome do produto:</label>
             <br />
             <input
             type="text"
-            name="nameProduct"
+            name="nome"
             placeholder="Produto"
-            value={nameProduct}
+            value={nome}
             onChange={(e) => onInputChange(e)}
             />
 
             <br />
             <br />
 
-            <label htmlFor="priceProduct">Preço do produto:</label>
+            <label htmlFor="preco">Preço do produto:</label>
             <br />
             <input
             type="number"
-            name="priceProduct"
+            name="preco"
             placeholder="R$"
-            value={priceProduct}
+            value={preco}
             onChange={(e) => onInputChange(e)}
             />
 
             <br />
             <br />
 
-            <label htmlFor="quantityProduct">Quantidade do produto:</label>
+            <label htmlFor="qtd">Quantidade do produto:</label>
             <br />
             <input
             type="number"
-            name="quantityProduct"
+            name="qtd"
             placeholder="Quantidade"
-            value={quantityProduct}
+            value={qtd}
             onChange={(e) => onInputChange(e)}
             />
 
+            
+            <br />
+            <br />
+
+            <label htmlFor='categoria'>Categoria</label>
+            <br />
+            <select onChange={(e) => handleCategory(e)} name='categoria'>
+                <option selected>Selecione uma categoria</option>
+                {categorias.map((categoria) => (
+                    <option value={categoria.id}>{categoria.nome}</option>
+                    ))
+                }
+            </select>
+            <br />
             <br />
             <br />
 
             <Button type="submit" variant="primary">Adicionar produto</Button>
+
+            <br />
+            <br />
+
+            <Link to="/produtos">
+                <Button variant="danger">Cancelar</Button>
+            </Link>
 
         </form>
     </Container>

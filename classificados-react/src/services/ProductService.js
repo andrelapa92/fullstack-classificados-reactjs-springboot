@@ -1,6 +1,7 @@
 import api from "./api";
 
 class ProductService{
+    
     getAll(){
         return api.get("/produtos");
     }
