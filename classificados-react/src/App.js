@@ -5,10 +5,9 @@ import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
 import Products from './pages/Products';
-import React, { useEffect, useState } from "react";
-import api from "./services/api";
 import EditProduct from './pages/EditProduct';
 import AddProduct from './pages/AddProduct';
+import ProductByCategory from './componentes/ProductByCategory';
 
 function App() {
 
@@ -20,6 +19,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="produtos" element={<Products />} />
             <Route path={"produtos/:id"} element={<EditProduct />} />
+            <Route path={"produtos/categoria/:category"} element={<ProductByCategory />} />
             <Route path="produtos/novoproduto" element={<AddProduct />} />
             <Route path="*" element={<NoPage />} />
           </Route>
