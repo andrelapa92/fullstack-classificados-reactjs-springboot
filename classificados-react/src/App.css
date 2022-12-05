@@ -24,6 +24,11 @@ body {
   font-size: 12px;
 }
 
+.quantityText {
+  font-size: 12px;
+  text-align: right;
+}
+
 .navlink {
   margin-left: 30px;
   text-decoration: none;

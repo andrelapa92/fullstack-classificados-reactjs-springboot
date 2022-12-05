@@ -11,6 +11,7 @@ function ProductCard(props) {
             <Card.Body>
                 <Card.Title>{props.price}</Card.Title>
                 <Card.Text>{props.title}</Card.Text>
+                <Card.Text className='quantityText'>Estoque: {props.quantity}</Card.Text>
                 <Card.Text className='categoryText border rounded-pill'>{props.category}</Card.Text>
                 <Link to={props.btnLink}>
                   <Button variant="primary">Editar produto</Button>

@@ -7,7 +7,7 @@ import axios from "axios";
 function AddProduct() {
 
     let navigate = useNavigate();
-    const {id} =useParams();
+    const {id} = useParams();
 
     const [product, setProduct] = useState({
         nome: "",
@@ -26,32 +26,27 @@ function AddProduct() {
     const loadCategorias = async () => {
         const result = await axios.get("http://localhost:8080/categorias")
         setCategorias(result.data);
-        console.log(result.data);
     }
 
     const { nome, preco, qtd } = product;
 
     const onInputChange = (e) => {
         setProduct({ ...product, [e.target.name]: e.target.value });
-
     };
 
     const handleCategory = (e) => {
         setProduct({
             ...product, categoria: {
-
                 id: e.target.value,
                 nome: e.target.options[e.target.selectedIndex].text
             }
-
         })
     }
 
     const sendForm = async (e) => {
         e.preventDefault();
         await axios.post("http://localhost:8080/produtos/", product)
-        navigate("/");
-        alert("Produto cadastrado com sucesso");
+        navigate("/produtos");
     };
 
     return (        
@@ -102,9 +97,9 @@ function AddProduct() {
             <label htmlFor='categoria'>Categoria</label>
             <br />
             <select onChange={(e) => handleCategory(e)} name='categoria'>
-                <option selected>Selecione uma categoria</option>
+                <option hidden>Selecione uma categoria</option>
                 {categorias.map((categoria) => (
-                    <option value={categoria.id}>{categoria.nome}</option>
+                    <option value={categoria.id} key={categoria.id}>{categoria.nome}</option>
                     ))
                 }
             </select>

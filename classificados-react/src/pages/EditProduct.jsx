@@ -63,7 +63,6 @@ const onClick = async () => {
   navigate("/produtos");
 }
 
-
   return (
     <Container className="text-center">
       <h1>Editando produto: {id}</h1>

@@ -27,6 +27,7 @@ function ShowProducts() {
         key={p?.id}
         price={p.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
         title={p.nome}
+        quantity={p.qtd}
         category={p.categoria.nome}
         btnLink={`/produtos/${p.id}`}
         />
